@@ -3,23 +3,25 @@
 fscanf(STDIN, "%d\n", $n);           // Reading input from STDIN
 $a = fscanf(STDIN, str_repeat("%d ", $n)."\n");          // Reading input from STDIN
 
-$accumulator = [];
-for($index=0; $index < $n; $index++) {
-    $retriever = $index;
-    $accumulator[$index] = 0;
-    $control = 1;
+$best = 0;
 
-    while ($retriever+$control <= $n) {
-        for ($i=0; $i<$control; $i++) {
-            $accumulator[$index] += $a[$retriever+$i];
+while(count($a) > 0) {
+    $counter = 0;
+    $sum = 0;
+    $accumulator = 0;
+
+    do {
+        $counter++;
+        if ($accumulator + $counter > count($a)) {
+            break;
         }
-    
-        $retriever += $control;
-        $control++;
+        $accumulator += $counter;
+    } while($accumulator < count($a));
 
-    }
+    $sum = array_sum(array_slice($a, 0, $accumulator));
+    $best = ($sum > $best) ? $sum : $best;
+
+    array_shift($a);
 }
 
-rsort($accumulator);
-
-echo $accumulator[0]."\n";
+echo "{$best}\n";
